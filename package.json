@@ -37,7 +37,7 @@
     "dotenv": "^4.0.0",
     "ee-first": "^1.1.1",
     "express": "^4.12.3",
-    "express-jwt": "^5.3.1",
+    "express-jwt": "^6.0.0",
     "fs-extra": "^8.1.0",
     "healthcheck-middleware": "^1.0.1",
     "jwks-rsa": "^1.6.0",
