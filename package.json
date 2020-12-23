@@ -91,6 +91,7 @@
     "test": "NODE_ENV=test PORT=3001 mocha --exit --require @babel/register --require ./testHelper.js test/**/*test.js test/**/**/*test.js",
     "stop": "node_modules/.bin/pm2 kill && node_modules/.bin/pm2 flush && node_modules/.bin/pm2 list",
     "restart-local": "npm stop && npm run local",
+    "dev": "NODE_ENV=development nodemon --exec babel-node -- src/server.js",
     "migrate": "knex --debug migrate:latest",
     "seed": "knex seed:run",
     "migrate_test": "NODE_ENV=test knex --debug migrate:latest",

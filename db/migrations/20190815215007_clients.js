@@ -1,6 +1,9 @@
 exports.up = async (knex) => {
   await knex.schema.createTable('clients', (table) => {
-    table.string('id');
+    table
+      .uuid('id')
+      .notNullable()
+      .primary();
     table.string('name').notNullable();
     table.string('description');
     table

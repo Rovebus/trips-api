@@ -1,0 +1,44 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 12
+    commands:
+      # update packages
+      - apt-get update -y
+      - npm install -g knex
+      - npm install
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Compiling the Node.js code
+  post_build:
+    commands:
+      # build into dist folder
+      - npm run build
+
+      # Install runtime dependencies
+      - npm install --production
+
+      - echo Build completed on `date`
+artifacts:
+  type: zip
+  files:
+    - README.md
+    - appspec.yml
+    - .ebextensions/*
+    - package.json
+    - .babelrc
+    - ecosystem.json5
+    - .eslintrc.js
+    - knexfile.js
+    - config/*
+    - db/**/*
+    - bootstrap/*
+    - dist/*
+    - dist/**/*
+    - static/*
+    - static/**/*
+    - swagger/**/*
+    - node_modules/**/*

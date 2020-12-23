@@ -1,7 +1,10 @@
 
 exports.up = async (knex) => {
   await knex.schema.createTable('currencies', (table) => {
-    table.increments('id');
+    table
+      .uuid('id')
+      .notNullable()
+      .primary();
     table.string('name').notNullable();
     table.string('symbol');
     table

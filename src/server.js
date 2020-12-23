@@ -46,7 +46,7 @@ async function start() {
     },
   });
 
-  const port = process.env.PORT || '3030';
+  const port = process.env.PORT || '8081';
 
   // global.errors = errors;
 

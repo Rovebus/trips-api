@@ -28,50 +28,74 @@ export default class BaseController {
     };
   }
 
-	async index(req, res, next) {
-		let response;
-		let extraOptions = {};
-		const model = this.model();
+  async index(req, res, next) {
+    
+    let response;
+    let extraOptions = {};
+    const model = this.model();
 
-		try {
-			const offset = req.swagger.params.offset.value;
-			const limit = req.swagger.params.limit.value;
-			extraOptions = this._attachSpecialParams(extraOptions, req);
+    try {
+      const offset = req.swagger.params.offset.value;
+      const limit = req.swagger.params.limit.value;
+      extraOptions = this._attachSpecialParams(extraOptions, req);
 
-			const extraParams = this._extraFilterParams(req);
-			const relationsParams = new SimpleRelationService().getSimpleRelations(model, req, {});
+      const extraParams = this._extraFilterParams(req);
+      const relationsParams = new SimpleRelationService().getSimpleRelations(model, req, {});
 
-			extraOptions.params = Object.assign(extraParams, relationsParams);
-			extraOptions.functionQuery = this._multiIdParams(req);
-			if (req.clientApp) {
-				extraOptions.client = req.clientApp;
-			}
-			if (req.country) {
-				extraOptions.country = req.country;
-			}
+      extraOptions.params = Object.assign(extraParams, relationsParams);
+      extraOptions.functionQuery = this._multiIdParams(req);
+      if (req.clientApp) {
+        extraOptions.client = req.clientApp;
+      }
+      if (req.country) {
+        extraOptions.country = req.country;
+      }
 
-			if (req.swagger.params.sort && req.swagger.params.sort.value) {
-				extraOptions.sort = req.swagger.params.sort.value;
-			}
+      if (req.swagger.params.sort && req.swagger.params.sort.value) {
+        extraOptions.sort = req.swagger.params.sort.value;
+      }
 
-			if (req.swagger.params.search && req.swagger.params.search.value) {
-				extraOptions.search = req.swagger.params.search.value;
-			}
+      if (req.swagger.params.search && req.swagger.params.search.value) {
+        extraOptions.search = req.swagger.params.search.value;
+      }
 
-			extraOptions.specialParams = this._specialFilterParams(req);
+      if (req.swagger.params.search_operator && req.swagger.params.search_operator.value) {
+        extraOptions.searchOperator = req.swagger.params.search_operator.value;
+      }
 
-			const result = await model.filterAndCount(offset, limit, extraOptions);
+      if (req.swagger.params.search_fields && req.swagger.params.search_fields.value) {
+        extraOptions.searchFields = req.swagger.params.search_fields.value;
+      }
 
-			response = await this._buildIndexResponse(req, offset, limit, result);
-			this._updateResponseHeaders(req, res);
-			this._respondByContentType(req.headers['content-type'], res, response);
-		} catch (err) {
-			logger.error(err);
-			res.status(400).json(this._errorMessage(`There is an error with ${model.name}`, 400, err));
-		}
+      extraOptions.specialParams = this._specialFilterParams(req);
 
-		return next();
-	}
+      if (req.query.filters) {
+        extraOptions.filters = JSON.parse(req.query.filters);
+      }
+
+      const result = await model.filterAndCount(offset, limit, extraOptions);
+
+      if (this.model().hasParent) {
+        for (let m = 0; m < result.items.length; m++) {
+          const item = result.items[m];
+          const condition = {};
+          condition[this.model().primaryKeyName] = item.parentId;
+          // eslint-disable-next-line no-await-in-loop
+          item.parent = await this.model().findOne(condition);
+        }
+      }
+
+      response = await this._buildIndexResponse(req, offset, limit, result);
+      this._updateResponseHeaders(req, res);
+      this._respondByContentType(req.headers.accept, res, response);
+    } catch (err) {
+      logger.error(err);
+      res.status(400).json(this._errorMessage(`There is an error with ${model.name}`, 400, err));
+    }
+
+    return next();
+  }
+
 
 	/**
 	 * Adds key-value pairs for an endpoint
@@ -129,104 +153,130 @@ export default class BaseController {
 		return {};
 	}
 
-  async create(req, res, next) {
-    const tableName = this.tableName();
-    const extraOptions = {};
-    let params = {};
-
-    try {
-      params = new SimpleRelationService().getSimpleRelations(this.model(), req, params);
-      const result = await this.model().create(req.body, params, extraOptions);
-      res.status(201).json(result);
-    } catch (err) {
-      console.error(err);
-      res.status(404).json(this._errorMessage(`Could not create an object of type ${tableName}`, 404, err));
-    }
-    return next();
-  }
+	async create(req, res, next) {
+    
+		const model = this.model();
+	
+		try {
+		  const resource = this._bodyParams(req);
+		  const result = await model.create(resource);
+		  if (this.model().hasParent && result.parentId) {
+			const condition = {};
+			condition[this.model().primaryKeyName] = result.parentId;
+			result.parent = await this.model().findOne(condition);
+		  }
+		  res.status(201).json(result);
+		} catch (err) {
+		  logger.error(err);
+		  res
+			.status(404)
+			.json(this._errorMessage(`Could not create an object of type ${model.name}`, 404, err));
+		}
+		return next();
+	}
 
 	_bodyParams(req) {
 		return req.swagger.params[this.model().name].value;
 	}
 
 	async update(req, res, next) {
+    
 		const model = this.model();
-
+	
 		try {
-			const resource = this._bodyParams(req);
-			const result = await model.update(resource, this._identifierValue(req.swagger));
-			this._updateResponseHeaders(req, res);
-			res.status(200).json(result);
+		  const resource = this._bodyParams(req);
+		  const result = await model.update(resource, this._identifierValue(req.swagger));
+		  this._updateResponseHeaders(req, res);
+		  res.status(200).json(result);
 		} catch (err) {
-			logger.error(err);
-			res
-				.status(404)
-				.json(this._errorMessage(`Could not update an object of type ${model.name}`, 404, err));
+		  logger.error(err);
+		  res
+			.status(404)
+			.json(this._errorMessage(`Could not update an object of type ${model.name}`, 404, err));
 		}
 		return next();
 	}
 
-  async destroy(req, res, next) {
-    const tableName = this.tableName();
-    const identifierValue = this._identifierValue(req.swagger);
-    let params = this._identifierParams(identifierValue);
-    const extraOptions = {};
-
-    try {
-      params = new SimpleRelationService().getSimpleRelations(this.model(), req, params);
-      const result = await this.model().delete(params, extraOptions);
-      if (result) {
-        res.status(200).json(result);
-      } else {
-        res.status(404).json(this._errorMessage(`Could not find an object of type ${tableName} with id ${identifierValue}`, 404, 'Object not found'));
-      }
-    } catch (err) {
-      console.error(err);
-      res.status(404).json(this._errorMessage(`Could not delete an object of type ${tableName}`, 404, err));
-    }
-    return next();
-  }
+	async destroy(req, res, next) {
+    
+		const tableName = this.tableName();
+		const identifierValue = this._identifierValue(req.swagger);
+		let params = this._identifierParams(identifierValue);
+	
+		this._addDestroyEtraOptions(req, params);
+	
+		try {
+		  params = new SimpleRelationService().getSimpleRelations(this.model(), req, params);
+		  const result = await this.model().delete(params);
+		  if (result) {
+			res.status(200).json(result);
+		  } else {
+			res
+			  .status(404)
+			  .json(
+				this._errorMessage(
+				  `Could not find an object of type ${tableName} with id ${identifierValue}`,
+				  404,
+				  'Object not found',
+				),
+			  );
+		  }
+		} catch (err) {
+		  logger.error(err);
+		  res
+			.status(404)
+			.json(this._errorMessage(`Could not delete an object of type ${tableName}`, 404, err));
+		}
+		return next();
+	}
 
 	async _buildShowResponse(req, resource) {
 		return resource;
 	}
 
 	async show(req, res, next) {
+    
 		const model = this.model();
-
+	
 		try {
-			const identifierValue = this._identifierValue(req.swagger);
-			let params = this._identifierParams(identifierValue);
-			params = new SimpleRelationService().getSimpleRelations(model, req, params);
-
-			const extraOptions = {};
-			extraOptions.client = req.clientApp;
-			extraOptions.country = req.country;
-
-			const resource = await model.findOne(params, extraOptions);
-
-			if (resource) {
-				this._updateResponseHeaders(req, res);
-				const response = await this._buildShowResponse(req, resource);
-				res.status(200).send(response);
-			} else {
-				res
-					.status(404)
-					.json(
-						this._errorMessage(
-							`No ${model.name} with id/uuid ${identifierValue} was found.`,
-							404,
-							'Entity does not exist',
-						),
-					);
-			}
+		  const identifierValue = this._identifierValue(req.swagger);
+		  let params = this._identifierParams(identifierValue);
+		  params = new SimpleRelationService().getSimpleRelations(model, req, params);
+	
+		  const extraOptions = {};
+		  extraOptions.client = req.clientApp;
+		  extraOptions.country = req.country;
+	
+		  const resource = await model.findOne(params, extraOptions);
+	
+		  if (this.model().hasParent) {
+			const condition = {};
+			condition[this.model().primaryKeyName] = resource.parentId;
+			resource.parent = await this.model().findOne(condition);
+		  }
+	
+		  if (resource) {
+			this._updateResponseHeaders(req, res);
+			const response = await this._buildShowResponse(req, resource);
+			res.status(200).send(response);
+		  } else {
+			res
+			  .status(404)
+			  .json(
+				this._errorMessage(
+				  `No ${model.name} with id/uuid ${identifierValue} was found.`,
+				  404,
+				  'Entity does not exist',
+				),
+			  );
+		  }
 		} catch (err) {
-			logger.error(err);
-			res.status(404).json(this._errorMessage(`There is an error with ${model.name}`, 404, err));
+		  logger.error(err);
+		  res.status(404).json(this._errorMessage(`There is an error with ${model.name}`, 404, err));
 		}
-
+	
 		return next();
-	}
+	  }
 
 
   tableName() {

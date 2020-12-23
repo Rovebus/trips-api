@@ -1,6 +1,9 @@
 exports.up = async (knex) => {
   await knex.schema.createTable('regions', (table) => {
-    table.increments('id');
+    table
+      .uuid('id')
+      .notNullable()
+      .primary();
     table.string('name').notNullable();
     table.string('countryCode').notNullable();
     table.foreign('countryCode').references('countries.code');
