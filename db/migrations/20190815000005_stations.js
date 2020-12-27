@@ -7,7 +7,7 @@ exports.up = async (knex) => {
       .primary();
     table.string('name').notNullable();
     table.string('stationGps');
-    table.integer('townId');
+    table.uuid('townId');
     table.foreign('townId').references('towns.id');
     table
       .timestamp('createdAt')

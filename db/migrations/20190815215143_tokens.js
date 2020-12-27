@@ -1,6 +1,6 @@
 exports.up = async (knex) => {
   await knex.schema.createTable('tokens', (table) => {
-    table.string('clientId').notNullable();
+    table.uuid('clientId').notNullable();
     table.foreign('clientId').references('clients.id');
     table.string('token', 24).notNullable();
     table.primary('clientId');

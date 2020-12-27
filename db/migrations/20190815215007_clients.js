@@ -14,7 +14,6 @@ exports.up = async (knex) => {
       .timestamp('updatedAt')
       .notNullable()
       .defaultTo(knex.raw('now()'));
-    table.primary('id');
   });
 };
 
