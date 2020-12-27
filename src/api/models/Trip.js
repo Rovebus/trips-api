@@ -14,8 +14,6 @@ export default class Trip extends BaseModel {
       'id',
       'fromStationId',
       'toStationId',
-      'fromTownId',
-      'toTownId',
       'leavesAt',
       'arrivesAt',
       'price',

@@ -1,4 +1,5 @@
 import BaseModel from './BaseModel';
+import Country from './Country';
 
 export default class Region extends BaseModel {
   static get tableName() {
@@ -17,6 +18,10 @@ export default class Region extends BaseModel {
       'createdAt',
       'updatedAt',
     ];
+  }
+
+  static get hasOne() {
+    return [Country];
   }
 
   static get textFields() {

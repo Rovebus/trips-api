@@ -2,4 +2,5 @@ in: path
 name: company_id
 description: Company ID
 required: true
-type: integer
+type: string
+format: uuid

@@ -2,4 +2,5 @@ in: path
 name: town_id
 description: Town ID
 required: true
-type: integer
+type: string
+format: uuid

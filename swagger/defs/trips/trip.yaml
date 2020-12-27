@@ -2,8 +2,6 @@ type: object
 required:
   - fromStationId
   - toStationId
-  - fromTownId
-  - toTownId
   - leavesAt
   - arrivesAt
   - price
@@ -11,15 +9,14 @@ required:
   - companyId
 properties:
   id:
-    type: integer
+    type: string
+    format: uuid
   fromStationId:
-    type: integer
+    type: string
+    format: uuid
   toStationId:
-    type: integer
-  fromTownId:
-    type: integer
-  toTownId:
-    type: integer
+    type: string
+    format: uuid
   leavesAt:
     type: string
     format: date-time
@@ -34,7 +31,8 @@ properties:
   status:
     type: string
   companyId:
-    type: integer
+    type: string
+    format: uuid
   createdAt:
     type: string
     format: date-time

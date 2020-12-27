@@ -4,11 +4,13 @@ required:
   - townId
 properties:
   id:
-    type: integer
+    type: string
+    format: uuid
   name:
     type: string
   townId:
-    type: integer
+    type: string
+    format: uuid
   stationGps:
     type: string
   createdAt:
