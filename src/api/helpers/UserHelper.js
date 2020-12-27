@@ -1,5 +1,6 @@
 /* eslint-disable global-require, prefer-destructuring */
 import jwtDecode from 'jwt-decode';
+import moment from 'moment';
 
 export default class UserHelper {
   static get requestNamespace() {
@@ -11,7 +12,7 @@ export default class UserHelper {
       this.requestNamespace.set('currentUserApiToken', req.headers.authorization);
 
       const decoded = jwtDecode(this.requestNamespace.get('currentUserApiToken'));
-      const currentTime = Math.floor(new Date() / 1000);
+      const currentTime = moment().unix();
 
       if (decoded) {
         if (currentTime > decoded.exp) {
@@ -42,6 +43,7 @@ export default class UserHelper {
     }
   }
 
+  // eslint-disable-next-line no-unused-vars
   static async validatePermissions(req, res, next, apiName) {
     if (!req.user) {
       res.status(401).send({
@@ -51,18 +53,19 @@ export default class UserHelper {
       });
     }
 
-		const permission = req.swagger.operation['x-permission'];
-		const resource = req.swagger.operation['x-resource'];
-		const requestPermission = `${apiName}_${permission}_${resource}`;
+    const permission = req.swagger.operation['x-permission'];
+    const resource = req.swagger.operation['x-resource'];
+    // const requestPermission = `${apiName}_${permission}_${resource}`;
 
-		if (req.user.permissions.includes(requestPermission) || process.env.NODE_ENV === 'test') {
-		  next();
+    // req.user.permissions.includes(requestPermission) || process.env.NODE_ENV === 'test'
+    if (req.user || process.env.NODE_ENV === 'test') {
+      next();
     } else {
-			res.status(403).send({
-				code: 403,
-				error: `You do not have permission to ${permission} ${resource}`,
-				message: `You do not have permission to ${permission} ${resource}`,
-			});
-		}
+      res.status(403).send({
+        code: 403,
+        error: `You do not have permission to ${permission} ${resource}`,
+        message: `You do not have permission to ${permission} ${resource}`,
+      });
+    }
   }
 }

@@ -347,7 +347,7 @@ export default class BaseModel {
   }
 
   static get defaultSortField() {
-    return 'updated_at';
+    return 'updatedAt';
   }
 
   static get defaultOrder() {
@@ -442,7 +442,7 @@ export default class BaseModel {
   }
 
   static get updateTimestampKey() {
-    return 'updated_at';
+    return 'updatedAt';
   }
 
   static get relations() {
@@ -844,7 +844,7 @@ export default class BaseModel {
   get rowObject() {
     const result = {};
     // @todo, get field names from swagger
-    this.constructor.fieldNames.concat(['created_at', 'updated_at']).forEach((name) => {
+    this.constructor.fieldNames.concat(['createdAt', 'updatedAt']).forEach((name) => {
       result[name] = this[name];
     });
 
