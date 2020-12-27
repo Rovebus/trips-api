@@ -3,10 +3,6 @@
   "version": "0.0.1",
   "description": "Rovebus Trips REST API.",
   "main": "app.js",
-  "engines": {
-    "node": ">=8",
-    "npm": "4.2.0"
-  },
   "resolutions": {
     "babel-core": "7.0.0-bridge.0"
   },
