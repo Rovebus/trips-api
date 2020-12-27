@@ -18,5 +18,9 @@ export default class Region extends BaseModel {
       'updatedAt',
     ];
   }
+
+  static get textFields() {
+    return ['name'];
+  }
 }
 

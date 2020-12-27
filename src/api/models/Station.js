@@ -19,5 +19,9 @@ export default class Station extends BaseModel {
       'updatedAt',
     ];
   }
+
+  static get textFields() {
+    return ['name'];
+  }
 }
 

@@ -9,6 +9,10 @@ export default class Country extends BaseModel {
     return 'code';
   }
 
+  static get textFields() {
+    return ['code', 'name'];
+  }
+
   static get fieldNames() {
     return ['code', 'name'];
   }
