@@ -5,8 +5,6 @@ get:
   tags:
   - $ref: ../../../../tags/client.yaml
   parameters:
-    - $ref: "../../../../swagger_v1.yaml#/parameters/CountryCode"
-    - $ref: "../../../../swagger_v1.yaml#/parameters/RegionId"
     - $ref: "../../../../swagger_v1.yaml#/parameters/TownId"
   responses:
     "200":

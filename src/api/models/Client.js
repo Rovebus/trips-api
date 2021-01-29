@@ -6,11 +6,11 @@ export default class Client extends BaseModel {
   }
 
 	static get primaryKeyName() {
-		return 'id';
+		return 'name';
 	}
 
   static get fieldNames() {
-    return ['id', 'name', 'description'];
+    return ['name', 'description'];
   }
 }
 

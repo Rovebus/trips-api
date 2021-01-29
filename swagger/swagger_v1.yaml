@@ -43,6 +43,10 @@ parameters:
     $ref: ./params/company_id.yaml
   Search:
     $ref: ./params/search.yaml
+  SearchFields:
+    $ref: ./params/search-fields.yaml
+  SearchOperator:
+    $ref: ./params/search-operator.yaml
   Sort:
     $ref: ./params/sort.yaml
   Offset:

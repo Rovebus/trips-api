@@ -1,0 +1,8 @@
+in: query
+name: search_fields
+description: Fields where the search will be applied to. By default it searches on all text fields.
+type: array
+required: false
+collectionFormat: multi
+items:
+  type: string

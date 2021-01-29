@@ -5,11 +5,12 @@ get:
   tags:
   - $ref: ../../../../tags/client.yaml
   parameters:
-    - $ref: "../../../../swagger_v1.yaml#/parameters/CountryCode"
-    - $ref: "../../../../swagger_v1.yaml#/parameters/RegionId"
     - $ref: "../../../../swagger_v1.yaml#/parameters/Offset"
     - $ref: "../../../../swagger_v1.yaml#/parameters/Limit"
     - $ref: "../../../../swagger_v1.yaml#/parameters/Sort"
+    - $ref: "../../../../swagger_v1.yaml#/parameters/Search"
+    - $ref: "../../../../swagger_v1.yaml#/parameters/SearchFields"
+    - $ref: "../../../../swagger_v1.yaml#/parameters/SearchOperator"
   responses:
     "200":
       description: Success

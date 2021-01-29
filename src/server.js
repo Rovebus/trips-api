@@ -4,6 +4,8 @@
 import bunyan from 'bunyan';
 import consign from 'consign';
 import UserHelper from './api/helpers/UserHelper';
+import Token from './api/models/Token';
+import Client from './api/models/Client';
 
 require('./bootstrap/init.js');
 const SwaggerExpress = require('swagger-express-mw');
@@ -82,14 +84,22 @@ async function start() {
     swagger: api,
     swaggerSecurityHandlers: {
 			rovebusKey: async (req, res, next) => {
-        const authenticated = await ClientAuthentication.auth.authenticate(req, next);
-        if (authenticated) {
-          for (const middleware of clientMiddlewares) {
-            await middleware(req, res);
-          }
+        const clientName = req.headers['x-rovebus-client'];
+        const hash = req.headers['x-rovebus-hash'];
+
+        const client = await Client.findOne({name: clientName});
+        const token = await Token.findOne({clientName: client.name});
+
+        if (client.name === token.clientName && hash === token.token) {
+          req.client = client;
           return next();
         }
-        return false;
+        res.send({
+          code: 401,
+          message: 'You are not authorized',
+        });
+        res.end();
+        return null;
       },
       adminAuth: async (req, res, next) => {
         try {

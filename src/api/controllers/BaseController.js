@@ -23,8 +23,8 @@ export default class BaseController {
       trips: Trip,
       tokens: Token,
       clients: Client,
-			currencies: Currency,
-			companies: Company,
+	  currencies: Currency,
+	  companies: Company,
     };
   }
 

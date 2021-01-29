@@ -1,0 +1,5 @@
+in: query
+name: search
+description: Search by available text fields
+required: false
+type: string

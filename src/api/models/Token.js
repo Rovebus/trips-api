@@ -6,11 +6,11 @@ export default class Token extends BaseModel {
   }
 
   static get fieldNames() {
-    return ['clientId', 'token'];
+    return ['clientName', 'token'];
   }
 
 	static get primaryKeyName() {
-		return 'clientId';
+		return 'clientName';
 	}
   /*
   static get fieldNames() {

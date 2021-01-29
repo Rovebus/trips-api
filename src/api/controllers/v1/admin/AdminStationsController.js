@@ -10,9 +10,11 @@ class AdminStationsController extends BaseController {
   }
 
 	_extraFilterParams(req) {
-		const params = {
-			townId: req.swagger.params.town_id.value,
-		};
+    const params = {};
+    
+    if (req.swagger.params.town_id && req.swagger.params.town_id.value) {
+      params.townId = req.swagger.params.town_id.value;
+    }
 
 		return params;
 	}

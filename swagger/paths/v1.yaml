@@ -46,9 +46,9 @@
 #CLIENT paths
 
 #Town paths
-/client/countries/{country_code}/regions/{region_id}/towns:
+/client/towns:
   $ref: ./v1/client/towns/index.yaml
-/client/countries/{country_code}/regions/{region_id}/towns/{town_id}:
+/client/towns/{town_id}:
   $ref: ./v1/client/towns/r.yaml
 
 #Client paths

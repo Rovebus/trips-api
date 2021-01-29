@@ -1,0 +1,6 @@
+in: query
+name: search_operator
+description: Operator to use for search (default is like)
+required: false
+type: string
+enum: [like, equals]
