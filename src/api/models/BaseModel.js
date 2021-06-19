@@ -651,7 +651,7 @@ export default class BaseModel {
   }
 
   async _saveWithTrx(trx) {
-    this[this.constructor.updateTimestampKey] = moment().toDate().getTime();
+    this[this.constructor.updateTimestampKey] = moment();
     const row = this.rowObject;
     if (this.constructor.softDelete) {
       row.deleted = this.deleted || false;

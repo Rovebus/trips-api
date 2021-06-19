@@ -1,6 +1,6 @@
 x-swagger-router-controller: AdminTripDescriptionsController
 get:
-  description: Shows a Trip
+  description: Shows a TripDescription
   operationId: show
   x-resource: trip_descriptions
   x-permission: read
@@ -31,7 +31,7 @@ put:
   - $ref: "../../../../swagger_v1.yaml#/parameters/Authorization"
   - $ref: "../../../../swagger_v1.yaml#/parameters/TripDescriptionId"
   - in: body
-    name: Trip
+    name: TripDescription
     schema:
       $ref: "../../../../swagger_v1.yaml#/definitions/TripDescription"
   responses:

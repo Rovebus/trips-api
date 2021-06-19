@@ -71,6 +71,9 @@ class AdminTripDescriptionsController extends BaseController {
         select distinct on (trip_descriptions.id)
         trip_descriptions.id,
         trip_descriptions.price,
+        trip_descriptions."companyId",
+        trip_descriptions."fromStationId",
+        trip_descriptions."toStationId",
         trip_descriptions."leavesAt",
         trip_descriptions."arrivesAt",
         trip_descriptions.days,
@@ -79,7 +82,7 @@ class AdminTripDescriptionsController extends BaseController {
             from (select stations.id, stations.name from stations where stations.id = trip_descriptions."fromStationId") as "r*") 
             as "fromStation",
         (select row_to_json("r*") 
-          from (select stations.name from stations where stations.id = trip_descriptions."toStationId") as "r*") 
+          from (select stations.id, stations.name from stations where stations.id = trip_descriptions."toStationId") as "r*") 
           as "toStation"
         from trip_descriptions
         inner join companies on companies.id = trip_descriptions."companyId"
