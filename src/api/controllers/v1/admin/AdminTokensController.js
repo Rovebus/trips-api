@@ -1,8 +1,9 @@
+import Token from '../../../models/Token';
 import BaseController from '../../BaseController';
 
 class AdminTokensController extends BaseController {
   tableName() {
-    return 'tokens';
+    return Token.tableName;
   }
 
   _identifierValue(swagger) {

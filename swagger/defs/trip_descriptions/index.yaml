@@ -1,0 +1,24 @@
+type: object
+required:
+  - offset
+  - count
+  - totalCount
+  - totalPages
+  - trip_descriptions
+  - links
+
+properties:
+  offset:
+    $ref: "../common/offset.yaml"
+  count:
+    $ref: "../common/count.yaml"
+  totalCount:
+    $ref: "../common/totalCount.yaml"
+  totalPages:
+    $ref: "../common/totalPages.yaml"
+  links:
+    $ref: "../common/links.yaml"
+  trip_descriptions:
+    type: array
+    items:
+      $ref: "../../swagger_v1.yaml#/definitions/TripDescription"

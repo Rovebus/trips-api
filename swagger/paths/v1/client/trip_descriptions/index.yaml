@@ -1,6 +1,6 @@
-x-swagger-router-controller: ClientTripsController
+x-swagger-router-controller: ClientTripDescriptionsController
 get:
-  description: Lists trips
+  description: Lists trip descriptions
   operationId: index
   tags:
     - $ref: ../../../../tags/client.yaml

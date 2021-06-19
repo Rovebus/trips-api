@@ -1,16 +1,13 @@
 type: object
 required:
-  - name
+  - number
 properties:
   id:
     type: string
     format: uuid
-  name:
+  number:
     type: string
-  townId:
-    type: string
-    format: uuid
-  stationGps:
+  countryCode:
     type: string
   createdAt:
     type: string

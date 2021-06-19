@@ -6,6 +6,7 @@ import consign from 'consign';
 import UserHelper from './api/helpers/UserHelper';
 import Token from './api/models/Token';
 import Client from './api/models/Client';
+import Company from './api/models/Company';
 
 require('./bootstrap/init.js');
 const SwaggerExpress = require('swagger-express-mw');

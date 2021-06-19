@@ -24,11 +24,21 @@
 /admin/countries/{country_code}/regions/{region_id}/towns/{town_id}/stations/{station_id}:
   $ref: ./v1/admin/countries/regions/towns/stations/rud.yaml
 
+#Stations CRUD
+/admin/stations:
+  $ref: ./v1/admin/stations/index.yaml
+
 #Trips CRUD
 /admin/trips:
   $ref: ./v1/admin/trips/index.yaml
 /admin/trips/{trip_id}:
   $ref: ./v1/admin/trips/rud.yaml
+
+#TripDescriptions CRUD
+/admin/trip_descriptions:
+  $ref: ./v1/admin/trip_descriptions/index.yaml
+/admin/trip_descriptions/{trip_description_id}:
+  $ref: ./v1/admin/trip_descriptions/rud.yaml
 
 #Currencies CRUD
 /admin/currencies:
@@ -42,6 +52,12 @@
 /admin/companies/{company_id}:
   $ref: ./v1/admin/companies/rud.yaml
 
+#Buses CRUD
+/admin/companies/{company_id}/buses:
+  $ref: ./v1/admin/companies/buses/index.yaml
+/admin/companies/{company_id}/buses/{bus_id}:
+  $ref: ./v1/admin/companies/buses/rud.yaml
+
 
 #CLIENT paths
 
@@ -52,10 +68,10 @@
   $ref: ./v1/client/towns/r.yaml
 
 #Client paths
-/client/trips:
-  $ref: ./v1/client/trips/index.yaml
-/client/trips/{trip_id}:
-  $ref: ./v1/client/trips/r.yaml
+/client/trip_descriptions:
+  $ref: ./v1/client/trip_descriptions/index.yaml
+/client/trip_descriptions/{trip_description_id}:
+  $ref: ./v1/client/trip_descriptions/r.yaml
 
 
 

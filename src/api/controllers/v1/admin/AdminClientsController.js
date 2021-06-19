@@ -1,8 +1,9 @@
+import { Client } from 'pg';
 import BaseController from '../../BaseController';
 
 class AdminClientsController extends BaseController {
   tableName() {
-    return 'clients';
+    return Client.tableName;
   }
 
   _identifierValue(swagger) {

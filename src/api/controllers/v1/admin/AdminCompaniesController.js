@@ -1,8 +1,9 @@
+import Company from '../../../models/Company';
 import BaseController from '../../BaseController';
 
 class AdminCompaniesController extends BaseController {
 	tableName() {
-		return 'companies';
+		return Company.tableName;
 	}
 
 	_identifierValue(swagger) {

@@ -1,0 +1,41 @@
+type: object
+required:
+  - fromStationId
+  - toStationId
+  - leavesAt
+  - arrivesAt
+  - price
+  - days
+  - companyId
+properties:
+  id:
+    type: string
+    format: uuid
+  fromStationId:
+    type: string
+    format: uuid
+  toStationId:
+    type: string
+    format: uuid
+  leavesAt:
+    type: string
+    format: date-time
+  arrivesAt:
+    type: string
+    format: date-time
+  price:
+    type: number
+    format: double
+  days:
+    type: array
+    items:
+      type: string
+  companyId:
+    type: string
+    format: uuid
+  createdAt:
+    type: string
+    format: date-time
+  updatedAt:
+    type: string
+    format: date-time

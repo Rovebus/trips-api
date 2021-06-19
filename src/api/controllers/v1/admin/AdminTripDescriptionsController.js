@@ -1,46 +1,25 @@
-import Station from '../../../models/Station';
-import SimpleRelationService from '../../../services/SimpleRelationService';
 import BaseController from '../../BaseController';
+import _ from 'underscore';
+import TripDescription from '../../../models/TripDescription';
+import SimpleRelationService from '../../../services/SimpleRelationService';
+import moment from 'moment';
 
-class AdminStationsController extends BaseController {
+
+
+class AdminTripDescriptionsController extends BaseController {
   tableName() {
-    return Station.tableName;
+    return TripDescription.tableName;
   }
 
   _identifierValue(swagger) {
-    return swagger.params.station_id.value;
+    return swagger.params.trip_description_id.value;
   }
 
-	_extraFilterParams(req) {
-    const params = {};
-    
-    if (req.swagger.params.town_id && req.swagger.params.town_id.value) {
-      params.townId = req.swagger.params.town_id.value;
-    }
-
-		return params;
-	}
-  async create(req, res, next) {
-    
-		const model = this.model();
-	
-		try {
-		  const resource = this._bodyParams(req);
-      resource.townId = req.swagger.params.town_id.value;
-		  const result = await model.create(resource);
-		  if (this.model().hasParent && result.parentId) {
-			const condition = {};
-			condition[this.model().primaryKeyName] = result.parentId;
-			result.parent = await this.model().findOne(condition);
-		  }
-		  res.status(201).json(result);
-		} catch (err) {
-		  logger.error(err);
-		  res
-			.status(404)
-			.json(this._errorMessage(`Could not create an object of type ${model.name}`, 404, err));
-		}
-		return next();
+  transformBodyBeforeCreate(params) {
+    const updatedParams = params;
+    updatedParams.leavesAt = moment(params.leavesAt).format("hh:mm:ss a");
+    updatedParams.arrivesAt = moment(params.arrivesAt).format("hh:mm:ss a");
+		return updatedParams;
 	}
 
   async index(req, res, next) {
@@ -88,27 +67,33 @@ class AdminStationsController extends BaseController {
         extraOptions.filters = JSON.parse(req.query.filters);
       }
 
-      const result = await Station.connection.raw(`
-        select stations.id, 
-        stations."name",
-        countries.name as country_name,
-        countries.code as country_code,
-        regions.name as region_name,
-        towns.name as town_name
-        from stations 
-        inner join towns on towns.id = stations."townId"
-        inner join regions on regions.id = towns."regionId"
-        inner join countries on countries.code = regions."countryCode"
+      const result = await TripDescription.connection.raw(`
+        select distinct on (trip_descriptions.id)
+        trip_descriptions.id,
+        trip_descriptions.price,
+        trip_descriptions."leavesAt",
+        trip_descriptions."arrivesAt",
+        trip_descriptions.days,
+        companies.name as company,
+        (select row_to_json("r*") 
+            from (select stations.id, stations.name from stations where stations.id = trip_descriptions."fromStationId") as "r*") 
+            as "fromStation",
+        (select row_to_json("r*") 
+          from (select stations.name from stations where stations.id = trip_descriptions."toStationId") as "r*") 
+          as "toStation"
+        from trip_descriptions
+        inner join companies on companies.id = trip_descriptions."companyId"
+        inner join stations on stations.id = trip_descriptions."fromStationId" or stations.id = trip_descriptions."toStationId"
         ${
         extraOptions.search ? `where station.name ilike '%${extraOptions.search}%'` : ''
         }
-        ${extraOptions.params.townId ? `and stations."townId" = '${extraOptions.params.townId}'` : ''}
+        ${extraOptions.params.townId ? ` and stations."townId" = '${extraOptions.params.townId}'` : ''}
         offset ${offset} limit ${limit}`
       );
 
-      const stations = result.rows;
+      const tripDescriptions = result.rows;
 
-      response = await this._buildIndexResponse(req, offset, limit, { items: stations, count: stations.length });
+      response = await this._buildIndexResponse(req, offset, limit, { items: tripDescriptions, count: tripDescriptions.length });
       this._updateResponseHeaders(req, res);
       this._respondByContentType(req.headers.accept, res, response);
     } catch (err) {
@@ -120,12 +105,12 @@ class AdminStationsController extends BaseController {
   }
 }
 
-const controller = new AdminStationsController();
+const controller = new AdminTripDescriptionsController();
 
 module.exports = {
   show: controller.show.bind(controller),
   index: controller.index.bind(controller),
   update: controller.update.bind(controller),
   destroy: controller.destroy.bind(controller),
-	create: controller.create.bind(controller),
+  create: controller.create.bind(controller)
 };

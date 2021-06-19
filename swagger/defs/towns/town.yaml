@@ -1,14 +1,15 @@
 type: object
 required:
   - name
-  - regionId
 properties:
   id:
-    type: integer
+    type: string
+    format: uuid
   name:
     type: string
   regionId:
-    type: integer
+    type: string
+    format: uuid
   createdAt:
     type: string
     format: date-time

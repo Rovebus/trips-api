@@ -1,8 +1,9 @@
+import Town from '../../../models/Town';
 import BaseController from '../../BaseController';
 
 class AdminTownsController extends BaseController {
   tableName() {
-    return 'towns';
+    return Town.tableName;
   }
 
   _identifierValue(swagger) {
@@ -16,6 +17,16 @@ class AdminTownsController extends BaseController {
 
 		return params;
 	}
+
+  _prepareObjectForCreate(req, params) {
+    const updatedParams = params;
+
+    if (req.swagger.params.region_id && req.swagger.params.region_id.value) {
+        updatedParams.regionId = req.swagger.params.region_id.value;
+    }
+    
+    return updatedParams;
+  }
 }
 
 const controller = new AdminTownsController();

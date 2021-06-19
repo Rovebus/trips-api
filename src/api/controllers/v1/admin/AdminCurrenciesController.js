@@ -1,8 +1,9 @@
+import Currency from '../../../models/Currency';
 import BaseController from '../../BaseController';
 
 class AdminCurrenciesController extends BaseController {
 	tableName() {
-		return 'currencies';
+		return Currency.tableName;
 	}
 
 	_identifierValue(swagger) {

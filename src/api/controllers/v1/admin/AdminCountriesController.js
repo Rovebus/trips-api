@@ -1,8 +1,9 @@
+import Country from '../../../models/Country';
 import BaseController from '../../BaseController';
 
 class AdminCountriesController extends BaseController {
   tableName() {
-    return 'countries';
+    return Country.tableName;
   }
 
   _identifierValue(swagger) {

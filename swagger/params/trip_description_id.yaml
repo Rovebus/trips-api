@@ -1,6 +1,6 @@
 in: path
-name: trip_id
-description: TripDescription ID
+name: trip_description_id
+description: Trip ID
 required: true
 type: string
 format: uuid

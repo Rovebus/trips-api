@@ -12,6 +12,8 @@ import Token from '../models/Token';
 import Client from '../models/Client';
 import Currency from '../models/Currency';
 import Company from '../models/Company';
+import Bus from '../models/Bus';
+import TripDescription from '../models/TripDescription';
 
 export default class BaseController {
   static get models() {
@@ -25,7 +27,14 @@ export default class BaseController {
       clients: Client,
 	  currencies: Currency,
 	  companies: Company,
+	  buses: Bus,
+	  trip_descriptions: TripDescription
     };
+  }
+
+  // HOOKS
+  transformBodyBeforeCreate(params) {
+	  return params;
   }
 
   async index(req, res, next) {
@@ -153,13 +162,17 @@ export default class BaseController {
 		return {};
 	}
 
+	_prepareObjectForCreate(req, params) {
+		return params;
+	}
+
 	async create(req, res, next) {
     
 		const model = this.model();
 	
 		try {
 		  const resource = this._bodyParams(req);
-		  const result = await model.create(resource);
+		  const result = await model.create(this._prepareObjectForCreate(req, resource));
 		  if (this.model().hasParent && result.parentId) {
 			const condition = {};
 			condition[this.model().primaryKeyName] = result.parentId;
@@ -176,7 +189,8 @@ export default class BaseController {
 	}
 
 	_bodyParams(req) {
-		return req.swagger.params[this.model().name].value;
+		const body = req.swagger.params[this.model().name].value;
+		return this.transformBodyBeforeCreate(body);
 	}
 
 	async update(req, res, next) {
@@ -196,6 +210,8 @@ export default class BaseController {
 		}
 		return next();
 	}
+
+	_addDestroyEtraOptions() {}
 
 	async destroy(req, res, next) {
     

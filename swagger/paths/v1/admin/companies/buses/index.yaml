@@ -1,0 +1,49 @@
+x-swagger-router-controller: AdminBusesController
+get:
+  description: Lists buses
+  operationId: index
+  x-resource: buses
+  x-permission: read
+  tags:
+  - $ref: ../../../../../tags/admin.yaml
+  parameters:
+    - $ref: "../../../../../swagger_v1.yaml#/parameters/Authorization"
+    - $ref: "../../../../../swagger_v1.yaml#/parameters/Offset"
+    - $ref: "../../../../../swagger_v1.yaml#/parameters/Limit"
+    - $ref: "../../../../../swagger_v1.yaml#/parameters/Sort"
+    - $ref: "../../../../../swagger_v1.yaml#/parameters/CompanyId"
+  responses:
+    "200":
+      description: Success
+      schema:
+        $ref: "../../../../../swagger_v1.yaml#/definitions/Bus"
+    default:
+      description: Error
+      schema:
+        $ref: ../../../../../responses/error.yaml
+  security: [ { adminAuth: [] } ]
+
+post:
+  description: Creates a Bus
+  operationId: create
+  x-resource: buses
+  x-permission: create
+  tags:
+  - $ref: ../../../../../tags/admin.yaml
+  parameters:
+  - $ref: "../../../../../swagger_v1.yaml#/parameters/Authorization"
+  - $ref: "../../../../../swagger_v1.yaml#/parameters/CompanyId"
+  - in: body
+    name: Bus
+    schema:
+      $ref: "../../../../../swagger_v1.yaml#/definitions/Bus"
+  responses:
+    "200":
+      description: Success
+      schema:
+        $ref: "../../../../../swagger_v1.yaml#/definitions/Bus"
+    default:
+      description: Error
+      schema:
+        $ref: ../../../../../responses/error.yaml
+  security: [ { adminAuth: [] } ]

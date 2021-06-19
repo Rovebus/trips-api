@@ -1,16 +1,16 @@
-x-swagger-router-controller: ClientTripsController
+x-swagger-router-controller: ClientTripDescriptionsController
 get:
-  description: Shows a Trip
+  description: Shows a TripDescription
   operationId: show
   tags:
     - $ref: ../../../../tags/client.yaml
   parameters:
-    - $ref: "../../../../swagger_v1.yaml#/parameters/TripId"
+    - $ref: "../../../../swagger_v1.yaml#/parameters/TripDescriptionId"
   responses:
     "200":
       description: Success
       schema:
-        $ref: "../../../../swagger_v1.yaml#/definitions/Trip"
+        $ref: "../../../../swagger_v1.yaml#/definitions/TripDescription"
     default:
       description: Error
       schema:

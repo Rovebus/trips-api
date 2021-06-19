@@ -37,10 +37,14 @@ parameters:
     $ref: ./params/station_id.yaml
   TripId:
     $ref: ./params/trip_id.yaml
+  TripDescriptionId:
+    $ref: ./params/trip_description_id.yaml
   ClientId:
     $ref: ./params/client_id.yaml
   CompanyId:
     $ref: ./params/company_id.yaml
+  BusId:
+    $ref: ./params/bus_id.yaml
   Search:
     $ref: ./params/search.yaml
   SearchFields:
@@ -81,8 +85,12 @@ definitions:
     $ref: ./defs/towns/town.yaml
   Trip:
     $ref: ./defs/trips/trip.yaml
+  TripDescription:
+    $ref: ./defs/trip_descriptions/trip_description.yaml
   Company:
     $ref: ./defs/companies/company.yaml
+  Bus:
+    $ref: ./defs/bus/bus.yaml
 
 
 securityDefinitions:

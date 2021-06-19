@@ -1,0 +1,68 @@
+x-swagger-router-controller: AdminbusesController
+get:
+  description: Shows a Bus
+  operationId: show
+  x-resource: buses
+  x-permission: read
+  tags:
+  - $ref: ../../../../../tags/admin.yaml
+  parameters:
+    - $ref: "../../../../../swagger_v1.yaml#/parameters/Authorization"
+    - $ref: "../../../../../swagger_v1.yaml#/parameters/CompanyId"
+    - $ref: "../../../../../swagger_v1.yaml#/parameters/BusId"
+  responses:
+    "200":
+      description: Success
+      schema:
+        $ref: "../../../../../swagger_v1.yaml#/definitions/Bus"
+    default:
+      description: Error
+      schema:
+        $ref: ../../../../../responses/error.yaml
+  security: [ { adminAuth: [] } ]
+
+put:
+  description: Updates a Bus
+  operationId: update
+  x-resource: companiies
+  x-permission: update
+  tags:
+  - $ref: ../../../../../tags/admin.yaml
+  parameters:
+    - $ref: "../../../../../swagger_v1.yaml#/parameters/Authorization"
+    - $ref: "../../../../../swagger_v1.yaml#/parameters/CompanyId"
+    - $ref: "../../../../../swagger_v1.yaml#/parameters/BusId"
+    - in: body
+      name: Bus
+      schema:
+        $ref: "../../../../../swagger_v1.yaml#/definitions/Bus"
+  responses:
+    "200":
+      description: Success
+      schema:
+        $ref: "../../../../../swagger_v1.yaml#/definitions/Bus"
+    default:
+      description: Error
+      schema:
+        $ref: ../../../../../responses/error.yaml
+  security: [ { adminAuth: [] } ]
+
+delete:
+  description: Destroys a Bus
+  operationId: destroy
+  x-resource: buses
+  x-permission: delete
+  tags:
+  - $ref: ../../../../../tags/admin.yaml
+  parameters:
+    - $ref: "../../../../../swagger_v1.yaml#/parameters/Authorization"
+    - $ref: "../../../../../swagger_v1.yaml#/parameters/CompanyId"
+    - $ref: "../../../../../swagger_v1.yaml#/parameters/BusId"
+  responses:
+    "200":
+      description: Success
+    default:
+      description: Error
+      schema:
+        $ref: ../../../../../responses/error.yaml
+  security: [ { adminAuth: [] } ]
