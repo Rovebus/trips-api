@@ -1,0 +1,27 @@
+x-swagger-router-controller: AdminTripDescriptionsController
+
+post:
+  description: Import TripDescriptions
+  operationId: import
+  x-resource: trip_descriptions
+  x-permission: create
+  tags:
+  - $ref: ../../../../tags/admin.yaml
+  parameters:
+  - $ref: "../../../../swagger_v1.yaml#/parameters/Authorization"
+  - in: body
+    name: TripDescriptions
+    schema:
+      type: array
+      items: 
+        type: object
+  responses:
+    "200":
+      description: Success
+      schema:
+        $ref: "../../../../swagger_v1.yaml#/definitions/TripDescription"
+    default:
+      description: Error
+      schema:
+        $ref: ../../../../responses/error.yaml
+  security: [ { adminAuth: [] } ]

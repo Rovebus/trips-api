@@ -17,7 +17,7 @@ export default class TripDescription extends BaseModel {
       'leavesAt',
       'arrivesAt',
       'price',
-      'days',
+      'day',
       'companyId',
       'createdAt',
       'updatedAt',

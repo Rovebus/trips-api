@@ -48,6 +48,22 @@ export default class BaseModel {
     throw new Error('All children must define fieldNames');
   }
 
+  static get defaultColumns() {
+    return [
+      'id',
+      'createdAt',
+      'updatedAt'
+    ];
+  }
+
+  static importColumns() {
+    return ['Name'];
+  }
+
+  static get importColumns() {
+    return this.fieldNames;
+  }
+
   static get fieldNamesWithTableName() {
     return this.fieldNames.map((name) => `${this.tableName}.${name}`);
   }
@@ -710,6 +726,16 @@ export default class BaseModel {
       record = await this.createWithTrx(object, trx);
     });
     return record;
+  }
+
+  /**
+   * Finds an existing row or creates a new one
+   * @param {*} object 
+   * @returns 
+   */
+  static async findOrCreate(object) {
+    const existingRecord = await this.findOne(object); 
+    return existingRecord || this.create(object);
   }
 
   /**

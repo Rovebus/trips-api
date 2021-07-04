@@ -5,7 +5,7 @@ required:
   - leavesAt
   - arrivesAt
   - price
-  - days
+  - day
   - companyId
 properties:
   id:
@@ -26,10 +26,9 @@ properties:
   price:
     type: number
     format: double
-  days:
-    type: array
-    items:
-      type: string
+  day:
+    type: string
+    enum: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
   companyId:
     type: string
     format: uuid

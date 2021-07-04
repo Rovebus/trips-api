@@ -188,6 +188,48 @@ export default class BaseController {
 		return next();
 	}
 
+	async _import(rows, options = { model: this.model() }) {
+		const { model } = options;
+		const importColumns = model.importColumns;
+		const inCompleteRows = [];
+		for (row of rows) {
+			const errors = [];
+			const object = {};
+			for (const column of importColumns) {
+				if (!row[column] || row[column].length > 0) {
+					errors.push(`The column ${column} is empty`);
+					continue;
+				} else {
+					object[camelize(column)] = row[column];
+				}
+			}
+			if (errors.length === 0) {
+				await model.findOrCreate(object);
+			} else {
+				row.errors = errors;
+				inCompleteRows.push(row);
+			}
+		}
+
+		return {
+			inCompleteRows,
+			passed: inCompleteRows.length === 0
+		};
+	}
+
+	async import(req, res, next) {   
+		const model = this.model(); 
+		const recordsToBeImported = req.body;
+		try {
+		  const result = await this._import(recordsToBeImported, { model });
+		  res.status(201).json(result);
+		} catch (err) {
+		  logger.error(err);
+		  res.status(400).json(this._errorMessage(`There is an error importing ${model.name}`, 400, err));
+		} 
+		return next();
+	}
+
 	_bodyParams(req) {
 		const body = req.swagger.params[this.model().name].value;
 		return this.transformBodyBeforeCreate(body);

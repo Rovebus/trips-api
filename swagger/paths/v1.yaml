@@ -37,8 +37,11 @@
 #TripDescriptions CRUD
 /admin/trip_descriptions:
   $ref: ./v1/admin/trip_descriptions/index.yaml
+/admin/trip_descriptions/import:
+  $ref: ./v1/admin/trip_descriptions/import.yaml
 /admin/trip_descriptions/{trip_description_id}:
   $ref: ./v1/admin/trip_descriptions/rud.yaml
+
 
 #Currencies CRUD
 /admin/currencies:
