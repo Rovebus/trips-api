@@ -18,7 +18,7 @@
     "@babel/register": "^7.0.0",
     "@risingstack/protect": "^1.2.0",
     "agentkeepalive": "^3.4.1",
-    "async": "^2.4.1",
+    "async": "^2.6.4",
     "azure-storage": "^2.6.0",
     "babel-loader": "^8.0.0",
     "babel-plugin-rewire": "^1.1.0",
