@@ -36,7 +36,7 @@
     "csv-stringify": "^5.3.3",
     "dotenv": "^4.0.0",
     "ee-first": "^1.1.1",
-    "express": "^4.12.3",
+    "express": "^4.17.3",
     "express-jwt": "^5.3.1",
     "fs-extra": "^8.1.0",
     "healthcheck-middleware": "^1.0.1",
